@@ -1,24 +1,24 @@
 #check_firewall
-
+$nagioswarn = 1
+$nagioscrit = 2
 $returnStateOK = 0
 $returnStateWarning = 1
 $returnStateCritical = 2
 $returnStateUnknown = 3
-
+$exitcode = $returnStateUnknown 
 $returnarray = @()
 
 $results = netsh advfirewall show currentprofile
 #$results | Select-String -Pattern  "Domain Profile" -CaseSensitive -SimpleMatch
 
+
 if($results -like "Domain Profile*" )
 {
-    #Write-host "Domain Profile Active"
     $returnarray="Domain Profile"
 }
 elseif($results -like "Private Profile*" )
 {
-    #Write-host "Private Profile Active"
-    $returnarray="Private Profile"
+     $returnarray="Private Profile"
 }
 elseif($results -like "Public Profile*" )
 {
@@ -28,12 +28,21 @@ elseif($results -like "Public Profile*" )
 
 if($results -like "State                                 ON")
     {
-    write-host "OK: Firewall ON - $returnarray "
-    $exitcode = $returnStateOK
-    }
+   $exitcode = $returnStateOK
+   $returnarray  = "OK: Firewall ON $returnarray"
+}
 else
     {
-    Write-host "ERROR: Firewall OFF - $returnarray"
-    $exitcode = $returnStateCritical
+    $exitcode = $returnStateCritical 
+    $returnarray ="ERROR: Firewall OFF $returnarray"
     }
+
+
+
+if($exitcode -eq "3"){
+$returnarray = "Unknow Error"
+}
+
+$OutputPerfdata +=" | exitcode=$exitcode;$nagioswarn;$nagioscrit" 
+Write-host $returnarray $OutputPerfdata
 exit $exitcode
