@@ -1,4 +1,6 @@
 #checking drive space 
+#Example from command line:  drive=d warn=90 crit=95
+#Example from command line:   .\check_ps_drive.ps1 D 90 95
 #$stopwatch = [system.diagnostics.stopwatch]::StartNew()
 #nagios stuff
 $returnStateOK = 0
