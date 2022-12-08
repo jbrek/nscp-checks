@@ -38,7 +38,7 @@ strpercent =  Round((100 - ((objItem.FreeSpace / objItem.Size) * 100)))
 
 Next
 stroutput = strdrivearg & " is " &strpercent& "% used. "& strfree &"GB free of " &strsize&"GB"
-strperfoutput = " | " & strdrivearg & "_used_%=" & strpercent&";"&strwarn&";"&strcrit&";0;100 " & strdrivearg & "_used_GB=" & (strsize-strfree) &";"&((strwarn * 0.01)* strsize)&";"&((strcrit* 0.01)* strsize)&";0;"&strsize
+strperfoutput = " | " & strdrivearg & "_used_%=" & strpercent&"%;"&strwarn&";"&strcrit&";0;100 " & strdrivearg & "_used_GB=" & (strsize-strfree) &"GB;"&((strwarn * 0.01)* strsize)&";"&((strcrit* 0.01)* strsize)&";0;"&strsize
 
 If(CInt(strpercent) >= CInt(strcrit))  Then
     wscript.echo "CRITICAL: "  & stroutput & strperfoutput
