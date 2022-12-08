@@ -1,8 +1,9 @@
 'Check_NRPE Plugin to check disk space
 'drive=d warn=90 crit=95 
-'Example from powershell terminal line:  cscript .\check_drive.vbs D 90 95 
+'Example from powershell terminal line:  cscript .\check_drive.vbs -a D 90 95 
 'Example for windows.cfg:  check_command       check_nrpe!check_drive -a "D 85 95"
 'Example for nsclient.ini: check_drive = check_drive.vbs $ARG1$ $ARG2$ $ARG3$
+'The nsclient wrapper.vbs takes Wscript.Arguments.Item(0)
 '2022-12-7
 strScriptHost = LCase(Wscript.FullName)
 
