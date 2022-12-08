@@ -1,9 +1,8 @@
 'Check_NRPE Plugin to check disk space
-'Example from command line:  drive=d warn=90 crit=95 bullshit=0
-'Example from command line:  cscript .\check_drive.vbs D 90 95 0
-'Example from nscp test:  cscript .\check_drive.vbs D 90 95
-
-'nsclient wrapper.vbs eats the first argument with the filename need bullshit for nsclient
+'drive=d warn=90 crit=95 
+'Example from powershell terminal line:  cscript .\check_drive.vbs D 90 95 
+'Example for windows.cfg:  check_command       check_nrpe!check_drive -a "D 85 95"
+'Example for nsclient.ini: check_drive = check_drive.vbs $ARG1$ $ARG2$ $ARG3$
 'StartTime = Timer()
 strScriptHost = LCase(Wscript.FullName)
 
@@ -13,12 +12,13 @@ Wscript.quit
 End If
 
 
-If WScript.Arguments.Count = 4 Then
-strdrivearg = Wscript.Arguments.Item(1) 
-strwarn = Wscript.Arguments.Item(2) 
-strcrit = Wscript.Arguments.Item(3)
+If WScript.Arguments.Count = 3 Then
+strdrivearg = Wscript.Arguments.Item(0) 
+strwarn = Wscript.Arguments.Item(1) 
+strcrit = Wscript.Arguments.Item(2)
 strdrive = Chr(39)&strdrivearg&chr(58)&Chr(39) 
 Else
+    strdrivearg = "C"
     strdrive = "'c:'"
     strwarn = "85"
     strcrit =  "95"
@@ -38,8 +38,8 @@ strfree = Round((objItem.FreeSpace / "1073741824"),2)
 strpercent =  Round((100 - ((objItem.FreeSpace / objItem.Size) * 100)))
 
 Next
-stroutput = strdrive & " is " &strpercent& "% used. "& strfree &"GB free of " &strsize&"GB"
-strperfoutput = " | " & strdrive & " used_%=" & strpercent&";"&strwarn&";"&strcrit&";0;100 used_GB=" & (strsize-strfree) &";"&((strwarn * 0.01)* strsize)&";"&((strcrit* 0.01)* strsize)&";0;"&strsize
+stroutput = strdrivearg & " is " &strpercent& "% used. "& strfree &"GB free of " &strsize&"GB"
+strperfoutput = " | " & strdrivearg & "_used_%=" & strpercent&";"&strwarn&";"&strcrit&";0;100 " & strdrivearg &"_used_GB=" & (strsize-strfree) &";"&((strwarn * 0.01)* strsize)&";"&((strcrit* 0.01)* strsize)&";0;"&strsize
 
 If(CInt(strpercent) >= CInt(strcrit))  Then
     wscript.echo "CRITICAL: "  & stroutput & strperfoutput

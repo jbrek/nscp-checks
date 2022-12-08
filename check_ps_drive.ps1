@@ -29,8 +29,8 @@ $d = Get-PSDrive $drive
 $size = ($d.free + $d.used) 
 
 $percent =  [math]::Round((100 - (($d.free / $size) * 100)))
-$output = $drive + " is " + $percent + "% used. " + [math]::Round(($d.free/1GB),2) + "GB free of " +  [math]::Round(($size/1GB),2)+"GB"
-$OutputPerfdata +=" | " + $drive + " used_%=" + $percent+";"+$nagioswarn+";"+$nagioscrit+";0;100 used_GB=" + [math]::Round((($size/1GB) - ($d.free/1GB)),2) +";"+ [math]::Round(($nagioswarn * 0.01) * ($size/1GB),2)+";"+[math]::Round(($nagioscrit * 0.01) * ($size/1GB),2) + ";0;" +[math]::Round(($size/1GB),2)
+$output = $drive + " is " + $percent + "% used. " + [math]::Round(($d.free/1GB),0) + "GB free of " +  [math]::Round(($size/1GB),0)+"GB"
+$OutputPerfdata +=" | " + $drive + "_used_%=" + $percent+"%;"+$nagioswarn+";"+$nagioscrit+" " + $drive + "_used_GB=" + [math]::Round((($size/1GB) - ($d.free/1GB)),2) +"GB;"+ [math]::Round(($nagioswarn * 0.01) * ($size/1GB),2)+";"+[math]::Round(($nagioscrit * 0.01) * ($size/1GB),2) + ";0;" +[math]::Round(($size/1GB),2)
 
 if($percent  -ge $nagioscrit )
         {
